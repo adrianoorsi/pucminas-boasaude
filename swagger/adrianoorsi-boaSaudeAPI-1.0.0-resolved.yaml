@@ -1,0 +1,340 @@
+---
+swagger: "2.0"
+info:
+  description: API do módulo MIC-GISA - Boa Saúde Assistência Médica
+  version: 1.0.0
+  title: API GISA - Boa Saúde
+  contact:
+    email: adriano.orsi1@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /adrianoorsi/boaSaudeAPI/1.0.0
+tags:
+- name: associados
+  description: associados da Boa Saúde Assistência Médica
+- name: prestadores
+  description: prestadores de serviço da Boa Saúde Assistência Médica
+- name: gestores
+  description: gestores estratégicos da Boa Saúde Assistência Médica
+schemes:
+- https
+paths:
+  /dadosPessoais/buscar/{id}:
+    get:
+      tags:
+      - associados
+      - prestadores
+      summary: atualização de dados pessoais
+      description: |
+        Retorna os dados pessoais de um determinado associado identificado pelo seu id
+      operationId: buscar
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id do associado
+        required: true
+        type: integer
+        format: int32
+      responses:
+        "200":
+          description: dados pessoais do associado com id informado
+          schema:
+            $ref: '#/definitions/DadosPessoais'
+        "400":
+          description: identificador inválido
+  /dadosPessoais/listarassociados:
+    get:
+      tags:
+      - prestadores
+      summary: busca dados pessoais de todos os associados para o prestador
+      description: |
+        Retorna os dados pessoais de todos os associados para o prestador selecionar
+      operationId: listarAssociados
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: dados pessoais do associado com id informado
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DadosPessoais'
+        "400":
+          description: nenhum associado encontrado
+  /dadosPessoais/alterar/{id}:
+    post:
+      tags:
+      - prestadores
+      - associados
+      summary: alteração de dados pessoais
+      description: alteração de dados pessoais de um associado
+      operationId: alterarDadosPessoais
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id do associado a alterar
+        required: true
+        type: integer
+      - in: body
+        name: dadosPessoais
+        description: dados pessoais a alterar
+        required: false
+        schema:
+          $ref: '#/definitions/DadosPessoais'
+      responses:
+        "201":
+          description: item incluído
+        "400":
+          description: entrada ou objeto inválido
+        "409":
+          description: os dados já existem
+  /dadosPessoais/incluir:
+    put:
+      tags:
+      - prestadores
+      summary: inclusão de dados pessoais
+      description: |
+        Incluir dados pessoais de um novo associado
+      operationId: incluirDadosPessoais
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: dadosPessoais
+        description: dados pessoais do novo associado
+        required: true
+        schema:
+          $ref: '#/definitions/DadosPessoais'
+      responses:
+        "200":
+          description: dados pessoais do associado com id informado
+          schema:
+            $ref: '#/definitions/DadosPessoais'
+        "400":
+          description: não foi possível incluir os dados pessoais
+  /historicoSaude/listar/{id}:
+    get:
+      tags:
+      - prestadores
+      summary: busca histórico de saúde de determinado associado para o prestador
+      description: |
+        Retorna os dados pessoais de todos os associados para o prestador selecionar
+      operationId: listarHistoricoSaude
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id do associado
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: histórico de sáude do associado com id informado
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/HistoricoSaude'
+        "400":
+          description: nenhum histórico encontrado
+  /historicoSaude/buscar/{id}:
+    get:
+      tags:
+      - associados
+      - prestadores
+      summary: recupera determinado histórico de saúde de um associado
+      description: |
+        Retorna um histórico de saúde identificado pelo seu id
+      operationId: buscarHistoricoSaude
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id do histórico de saúde
+        required: true
+        type: integer
+        format: int32
+      responses:
+        "200":
+          description: histórico de saúde com id informado
+          schema:
+            $ref: '#/definitions/HistoricoSaude'
+        "400":
+          description: identificador inválido
+  /historicoSaude/incluir:
+    put:
+      tags:
+      - prestadores
+      - associados
+      summary: inclusão de Histórico de Saúde
+      description: permite inclusão de item no Histórico de Saúde de um associado
+      operationId: incluirHistoricoSaude
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: historicoSaude
+        description: histórico de saúde a incluir
+        required: false
+        schema:
+          $ref: '#/definitions/HistoricoSaude'
+      responses:
+        "201":
+          description: item incluído
+        "400":
+          description: entrada ou objeto inválido
+        "409":
+          description: o histórico já existe
+  /historicoSaude/alterar/{id}:
+    post:
+      tags:
+      - prestadores
+      - associados
+      summary: alteração de um item do Histórico de Saúde
+      description: alteração de um item do Histórico de Saúde
+      operationId: alterarHistoricoSaude
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id do do Histórico de Saúde a alterar
+        required: true
+        type: integer
+      - in: body
+        name: historicoSaude
+        description: Histórico de Saúde a alterar
+        required: false
+        schema:
+          $ref: '#/definitions/HistoricoSaude'
+      responses:
+        "201":
+          description: item incluído
+        "400":
+          description: entrada ou objeto inválido
+        "409":
+          description: o histórico já existe
+  /historicoSaude/importar:
+    put:
+      tags:
+      - prestadores
+      summary: importação de Históricos de Saúde
+      description: permite inclusão em lote de Histórico de Saúde
+      operationId: importarHistoricosSaude
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: historicoSaude
+        description: histórico de saúde a incluir
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/HistoricoSaude'
+      responses:
+        "201":
+          description: itens incluído
+        "400":
+          description: entrada ou objeto inválido
+        "409":
+          description: o histórico já existe
+  /historicoSaude/listarcid:
+    get:
+      tags:
+      - prestadores
+      - associados
+      summary: recupera lista de CID
+      description: |
+        Retorna todos os CIDs para o usuário selecionar
+      operationId: listarCID
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: lista de CIDs
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CID'
+        "400":
+          description: nenhum CID encontrado
+definitions:
+  DadosPessoais:
+    type: object
+    required:
+    - endereco
+    - estadoCivil
+    - id
+    - nome
+    properties:
+      id:
+        type: integer
+        format: int32
+        example: 1234
+      nome:
+        type: string
+        example: Fulano de Tal
+      endereco:
+        type: string
+        example: Rua Principal, 123 - Centro - CEP 12345-678 - DF - Brasil
+      estadoCivil:
+        type: string
+        example: Solteiro
+  HistoricoSaude:
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int32
+        example: 1234
+      tipo:
+        type: string
+        example: Consulta
+      dataOcorrencia:
+        type: string
+        format: date
+        example: 26/04/2022
+      dataTermino:
+        type: string
+        format: date
+        example: 26/04/2022
+      situacao:
+        type: string
+        example: Agendada
+      CID:
+        $ref: '#/definitions/CID'
+  CID:
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int32
+        example: 1234
+      codigo:
+        type: string
+        example: 6A40
+      descricao:
+        type: string
+        example: Catatonia associada a outro transtorno mental
